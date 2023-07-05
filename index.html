@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"
+    />
+
+    <link href="style.css" rel="stylesheet" />
+    <title>Whatfix Hub</title>
+    <script type="text/javascript">
+      /// IMPORTANT
+      // the variable below helps embed know if the load is happening on the desktop hub.
+      window._wfx_desktop_hub = true;
+    </script>
+    <script src="index.js"></script>
+    <script src="https://unpkg.com/localbase/dist/localbase.dev.js"></script>
+
+    <script>
+      let db = new Localbase("db");
+    </script>
+  </head>
+
+  <body>
+    <div id="whatfix_widget_container">
+      <div class="main-container">
+        <div class="main-panel-container">
+          <div class="main-action-container">
+            <div class="action-icons active" id="selfhelp-btn">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
+                  stroke="#1F1F32"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+            <div class="action-icons" id="tasklist-btn">
+              <svg
+                width="40"
+                height="40"
+                viewBox="0 0 40 40"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M13 20L18 25L28 15"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </div>
+          </div>
+          <div class="action-icons" id="close-btn">
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 40 40"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              class="close close_btn"
+              data-dismiss="modal"
+              aria-label="Close"
+              data-backdrop="static"
+              data-keyboard="false"
+              id="close_modal_button"
+            >
+              <path
+                d="M26 14L14 26M14 14L26 26"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
+        </div>
+        <div class="main-body-container">
+          <div id="selfhelp_tab">
+            <div id="selfhelp_panel"></div>
+          </div>
+          <div id="tasklist_tab">
+            <div id="tasklist_panel"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    <!-- <script
+      language="javascript"
+      type="text/javascript"
+      src="http://localhost:9090/whatfix.com/embed/embed.nocache.js"
+    ></script> -->
+    <script
+      language="javascript"
+      async="true"
+      type="text/javascript"
+      src="https://cdn.quickolabs.com/prod/0faea2dd-edb0-4fb1-a45c-53f48fcfa870/initiator/initiator.nocache.js"
+    ></script>
+    <script>
+      const position = {
+        x: parseInt(localStorage.getItem("last_pos_x")) || 0,
+        y: parseInt(localStorage.getItem("last_pos_y")) || 0,
+      };
+
+      // the code below takes care of retaining the last position
+      document.getElementsByClassName(
+        "main-container"
+      )[0].style.transform = `translate(${position.x}px, ${position.y}px)`;
+
+      interact(".main-panel-container").draggable({
+        listeners: {
+          move(event) {
+            position.x += event.dx;
+            position.y += event.dy;
+
+            localStorage.setItem("last_pos_x", parseInt(position.x));
+            localStorage.setItem("last_pos_y", parseInt(position.y));
+            document.getElementsByClassName(
+              "main-container"
+            )[0].style.transform = `translate(${position.x}px, ${position.y}px)`;
+          },
+        },
+      });
+
+      document
+        .getElementById("selfhelp-btn")
+        .addEventListener("click", function () {
+          document.getElementById("selfhelp_tab").style.display = "block";
+          document.getElementById("tasklist_tab").style.display = "none";
+          document.getElementById("selfhelp-btn").classList.add("active");
+          document.getElementById("tasklist-btn").classList.remove("active");
+        });
+
+      document
+        .getElementById("tasklist-btn")
+        .addEventListener("click", function () {
+          document.getElementById("selfhelp_tab").style.display = "none";
+          document.getElementById("tasklist_tab").style.display = "block";
+          document.getElementById("tasklist-btn").classList.add("active");
+          document.getElementById("selfhelp-btn").classList.remove("active");
+        });
+
+      document
+        .getElementById("close-btn")
+        .addEventListener("click", function () {
+          var win = nw.Window.get();
+          win.minimize();
+        });
+    </script>
+  </body>
+</html>

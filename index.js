@@ -1,3 +1,4 @@
+console.log("Entered");
 nw.Window.get().on("new-win-policy", function (frame, url, policy) {
   // do not open the window
   policy.ignore();
